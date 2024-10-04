@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment"; // You can use dayjs instead if you prefer a lighter package
+import moment from "moment";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -13,14 +13,12 @@ const App = () => {
   const [lastData, setLastData] = useState(null);
   const [timeAgo, setTimeAgo] = useState("");
 
-  // Fetch the last data entry
   const fetchLastData = async () => {
     try {
       const response = await axios.get("http://localhost:5000/data");
-      const lastEntry = response.data[0]; // Get the latest data (first in descending order)
+      const lastEntry = response.data[0];
       setLastData(lastEntry);
 
-      // Calculate time ago for the last data entry
       if (lastEntry) {
         const lastAddedDateTime = moment(
           `${lastEntry.addedDate} ${lastEntry.addedTime}`
@@ -87,7 +85,6 @@ const App = () => {
       console.log(response.data);
       alert("Data added successfully");
 
-      // Fetch the latest data after submitting
       fetchLastData();
     } catch (error) {
       console.error(error);
@@ -98,8 +95,6 @@ const App = () => {
   return (
     <div className="my-12">
       <h1 className="text-center">Add Data</h1>
-
-      {/* Show the last data added time ago */}
       {lastData && (
         <div className="text-center my-6">
           <p>Last data was added {timeAgo}</p>
