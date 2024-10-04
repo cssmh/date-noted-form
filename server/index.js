@@ -24,6 +24,30 @@ const client = new MongoClient(process.env.URI, {
 async function run() {
   try {
     // await client.connect();
+
+    const dataCollection = client.db("dateNote").collection("form");
+
+    app.post("/data", async (req, res) => {
+      try {
+        res.send(await dataCollection.insertOne(req.body));
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    app.get("/data", async (req, res) => {
+      try {
+        const data = await dataCollection
+          .find()
+          .sort({ _id: -1 })
+          .toArray();
+        res.send(data);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. Successfully connected to MongoDB!");
   } finally {
